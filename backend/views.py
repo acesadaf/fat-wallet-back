@@ -32,7 +32,7 @@ def add_user(request):
 
     user.save()
 
-    return HttpResponse("OK")
+    return HttpResponse("Added")
 
 
 @csrf_exempt
