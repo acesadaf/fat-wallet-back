@@ -3,9 +3,12 @@ from django.shortcuts import redirect
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.http import HttpResponse
 import json
 import ast
+
+user_signed_in = None
 
 
 @csrf_exempt
@@ -17,6 +20,7 @@ def index(request):
 
 @csrf_exempt
 def add_user(request):
+    print("registering...")
     body = json.loads(request.body)
     username, email, password, first_name, last_name = body["username"], body["email"], body[
         "password"], body["first_name"], body["last_name"]
@@ -29,6 +33,22 @@ def add_user(request):
     user.save()
 
     return HttpResponse("OK")
+
+
+@csrf_exempt
+def sign_in(request):
+    global user_signed_in
+    body = json.loads(request.body)
+    username, password = body["username"], body["password"]
+    user = authenticate(username=username, password=password)
+
+    if user is not None:
+
+        user_signed_in = username
+        print("Signed in:", user_signed_in)
+        return HttpResponse("Signed in!")
+    else:
+        return HttpResponse("No users with those credentials.")
 
     # body = json.loads(request.body)
 
