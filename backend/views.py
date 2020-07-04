@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
+from backend.models import *
 import json
 import ast
 
@@ -16,6 +17,18 @@ user_signed_in = None
 def index(request):
     print(request.body)
     return HttpResponse("OK")
+
+@csrf_exempt
+def expense_submit(request):
+    print("adding...")
+    body = json.loads(request.body)
+    name, amount, date_of_expense, category, description, user = body["name"], body[
+        "amount"], body["date_of_expense"], body["category"], body["description"], body["user"]
+
+    exp = expense(name = name, amount = amount, date = date_of_expense, category = purchase_category.objects.get(category = category), description = description, user = User.objects.get(username = user))
+    exp.save()
+    print(expense.objects.all())
+    return HttpResponse("Expense Added")
 
 
 @csrf_exempt
