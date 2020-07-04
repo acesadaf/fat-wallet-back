@@ -75,3 +75,14 @@ def sign_in(request):
     # return redirect('http://stackoverflow.com/')
 
     # Create your views here.
+
+@csrf_exempt
+def category_submit(request):
+    print("adding...")
+    body = json.loads(request.body)
+    category = body["category"]
+
+    cat = purchase_category(category = category)
+    cat.save()
+    print(purchase_category.objects.all())
+    return HttpResponse("Category Added")
