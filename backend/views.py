@@ -135,3 +135,22 @@ def category_data(request):
 
     to_send = list(to_send)
     return JsonResponse(to_send, safe=False)
+
+
+@csrf_exempt
+def category_wise_user_data(request):
+    body = json.loads(request.body)
+    requesting_user = body["username"]
+    this_user = User.objects.get(username=requesting_user)
+    expenses = expense.objects.filter(user=this_user).values()
+    category_wise = {}
+    for e in expenses:
+        e['amount'] = float(e['amount'])
+        cat_id = e['category_id']
+        category_name = purchase_category.objects.get(id=cat_id).category
+        category_wise[category_name] = category_wise.get(
+            category_name, 0) + e['amount']
+
+    return JsonResponse(category_wise)
+
+    #general_user = User.objects.get(username="General")

@@ -10,4 +10,6 @@ urlpatterns = [
     path("category_submit", views.category_submit, name="category_submit"),
     path("expense_data", views.expense_data, name="expense_data"),
     path("category_data", views.category_data, name="category_data"),
+    path("category_wise_user_data", views.category_wise_user_data,
+         name="category_wise_user_data"),
 ]
