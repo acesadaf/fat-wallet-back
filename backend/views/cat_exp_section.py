@@ -9,7 +9,7 @@ from backend.models import *
 import json
 import ast
 from django.http import JsonResponse
-#import decimal
+# import decimal
 
 user_signed_in = None
 @csrf_exempt
@@ -22,11 +22,15 @@ def category_data(request):
         user=this_user) | purchase_category.objects.filter(user=general_user)
     to_send = cat.values()
     for c in to_send:
+        user_id = c['user_id']
+        username = User.objects.get(id=user_id).username
         del c['user_id']
         del c['id']
+        c['username'] = username
 
     to_send = list(to_send)
     return JsonResponse(to_send, safe=False)
+
 
 @csrf_exempt
 def expense_submit(request):
@@ -42,19 +46,20 @@ def expense_submit(request):
     return HttpResponse("Expense Added")
 
 
-
 @csrf_exempt
 def category_submit(request):
     print("adding...")
     body = json.loads(request.body)
     name, category = body["name"], body["category"]
-    try: 
-        cat = purchase_category(user = User.objects.get(username = name), category=category)
+    try:
+        cat = purchase_category(user=User.objects.get(
+            username=name), category=category)
         cat.save()
         # print(purchase_category.objects.all())
         return HttpResponse("Category Added")
     except:
         return HttpResponse("Failed to Add")
+
 
 @csrf_exempt
 def category_delete(request):
@@ -63,7 +68,29 @@ def category_delete(request):
     name, cat = body["name"], body["category"]
 
     print(purchase_category.objects.all())
-    purchase_category.objects.get(user = User.objects.get(username = name), category= cat).delete()
+    purchase_category.objects.get(user=User.objects.get(
+        username=name), category=cat).delete()
     print(purchase_category.objects.all())
-    
+
     return HttpResponse("Category deleted")
+
+
+@csrf_exempt
+def category_edit(request):
+    print("editing...")
+    body = json.loads(request.body)
+    name, old_cat, new_cat = body["name"], body["old"], body["new"]
+
+    print(purchase_category.objects.filter(
+        user=User.objects.get(username=name)))
+
+    edited_cat = purchase_category.objects.get(user=User.objects.get(
+        username=name), category=old_cat)
+
+    edited_cat.category = new_cat
+    edited_cat.save()
+
+    print(purchase_category.objects.filter(
+        user=User.objects.get(username=name)))
+
+    return HttpResponse("Category Edited")

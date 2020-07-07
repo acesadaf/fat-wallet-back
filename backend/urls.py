@@ -16,4 +16,5 @@ urlpatterns = [
     path("monthly_user_data", graphs.monthly_user_data,
          name="monthly_user_data"),
     path("category_delete", cat_exp_section.category_delete, name="category_delete"),
+    path("category_edit", cat_exp_section.category_edit, name="category_edit"),
 ]
