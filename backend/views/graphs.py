@@ -9,6 +9,8 @@ from backend.models import *
 import json
 import ast
 from django.http import JsonResponse
+import datetime
+from django.db.models import Sum
 #import decimal
 
 user_signed_in = None
@@ -30,3 +32,33 @@ def category_wise_user_data(request):
     return JsonResponse(category_wise)
 
     #general_user = User.objects.get(username="General")
+
+
+@csrf_exempt
+def monthly_user_data(request):
+    body = json.loads(request.body)
+    requesting_user, count, month_or_week = body["username"], body["duration"], body["month_or_week"]
+    this_user = User.objects.get(username=requesting_user)
+    # month_wise = {}
+    
+    today = datetime.date.today()
+    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
+    monthly_expense = {}
+    for e in range(count-1, -1,-1):
+        if today.month-e < 0:
+            temp = list(expense.objects.filter(date__year=today.year-1, date__month = 12 - (today.month-e)).aggregate(Sum('amount')).values())[0]
+            if temp != None:
+                monthly_expense[month[today.month - e]] = float(temp)
+            else:
+                monthly_expense[month[today.month - e]] = float(0)
+        else:
+            temp = list(expense.objects.filter(date__year=today.year, date__month = today.month-e).aggregate(Sum('amount')).values())[0]
+            if temp != None:
+                monthly_expense[month[today.month - e]] = float(temp)
+            else:
+                monthly_expense[month[today.month - e]] = float(0)
+
+    print(monthly_expense)
+
+    return JsonResponse(monthly_expense)

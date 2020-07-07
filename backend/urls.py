@@ -13,4 +13,6 @@ urlpatterns = [
     path("category_data", cat_exp_section.category_data, name="category_data"),
     path("category_wise_user_data", graphs.category_wise_user_data,
          name="category_wise_user_data"),
+    path("monthly_user_data", graphs.monthly_user_data,
+         name="monthly_user_data"),
 ]
