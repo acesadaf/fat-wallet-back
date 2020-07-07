@@ -47,9 +47,23 @@ def expense_submit(request):
 def category_submit(request):
     print("adding...")
     body = json.loads(request.body)
-    category = body["category"]
+    name, category = body["name"], body["category"]
+    try: 
+        cat = purchase_category(user = User.objects.get(username = name), category=category)
+        cat.save()
+        # print(purchase_category.objects.all())
+        return HttpResponse("Category Added")
+    except:
+        return HttpResponse("Failed to Add")
 
-    cat = purchase_category(category=category)
-    cat.save()
+@csrf_exempt
+def category_delete(request):
+    print("deleting...")
+    body = json.loads(request.body)
+    name, cat = body["name"], body["category"]
+
     print(purchase_category.objects.all())
-    return HttpResponse("Category Added")
+    purchase_category.objects.get(user = User.objects.get(username = name), category= cat).delete()
+    print(purchase_category.objects.all())
+    
+    return HttpResponse("Category deleted")

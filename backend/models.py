@@ -5,8 +5,11 @@ GENERAL_USER = 10
 
 
 class purchase_category(models.Model):
+    class Meta:
+         unique_together = (("category", "user"),)
+
     category = models.CharField(
-        max_length=50, unique=True)
+        max_length=50)
 
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, default=GENERAL_USER)
