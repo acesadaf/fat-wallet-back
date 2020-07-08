@@ -6,7 +6,7 @@ GENERAL_USER = 10
 
 class purchase_category(models.Model):
     class Meta:
-         unique_together = (("category", "user"),)
+        unique_together = (("category", "user"),)
 
     category = models.CharField(
         max_length=50)
@@ -29,6 +29,6 @@ class expense(models.Model):
         User, on_delete=models.CASCADE, related_name="expenses")
 
     def __str__(self):
-        return f"{self.name}, {self.amount}, {self.date}, {self.category}, {self.description}, {self.user}"
+        return f"{self.id}, {self.name}, {self.amount}, {self.date}, {self.category}, {self.description}, {self.user}"
 
     # Create your models here.

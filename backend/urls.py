@@ -17,4 +17,6 @@ urlpatterns = [
          name="monthly_user_data"),
     path("category_delete", cat_exp_section.category_delete, name="category_delete"),
     path("category_edit", cat_exp_section.category_edit, name="category_edit"),
+    path('expense_delete', expense_table.expense_delete, name="expense_delete"),
+    path('expense_edit', expense_table.expense_edit, name="expense_edit"),
 ]
