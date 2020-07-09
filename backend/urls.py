@@ -1,6 +1,6 @@
 from django.urls import path
 
-from backend.views import graphs, cat_exp_section, signin, expense_table
+from backend.views import graphs, cat_exp_section, signin, expense_table, stats
 
 
 urlpatterns = [
@@ -19,4 +19,5 @@ urlpatterns = [
     path("category_edit", cat_exp_section.category_edit, name="category_edit"),
     path('expense_delete', expense_table.expense_delete, name="expense_delete"),
     path('expense_edit', expense_table.expense_edit, name="expense_edit"),
+    path('stats_data', stats.stats_data, name="stats_data"),
 ]
