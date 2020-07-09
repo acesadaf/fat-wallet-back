@@ -20,14 +20,35 @@ def add_user(request):
     username, email, password, first_name, last_name = body["username"], body["email"], body[
         "password"], body["first_name"], body["last_name"]
 
-    user = User.objects.create_user(username, email, password)
+    exists = ""
+    try:
+        User.objects.get(username= username)
+        exists = "Username"
+    except User.DoesNotExist:
+        pass
 
-    user.first_name = first_name
-    user.last_name = last_name
+    
+    lst = User.objects.filter(email= email).values()
+    if len(lst) != 0:
+        if not exists:
+            exists = "Email"
+        else:
+            exists += " and Email"
+    
 
-    user.save()
 
-    return HttpResponse("Added")
+    if not exists:
+        user = User.objects.create_user(username, email, password)
+        
+        user.first_name = first_name
+        user.last_name = last_name
+
+        user.save()
+        return HttpResponse("Added")
+    else:
+        return HttpResponse(exists + " taken")
+
+
 
 
 @csrf_exempt
