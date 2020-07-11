@@ -13,6 +13,7 @@ from django.http import JsonResponse
 
 user_signed_in = None
 
+
 @csrf_exempt
 def add_user(request):
     print("registering...")
@@ -22,24 +23,21 @@ def add_user(request):
 
     exists = ""
     try:
-        User.objects.get(username= username)
+        User.objects.get(username=username)
         exists = "Username"
     except User.DoesNotExist:
         pass
 
-    
-    lst = User.objects.filter(email= email).values()
+    lst = User.objects.filter(email=email).values()
     if len(lst) != 0:
         if not exists:
             exists = "Email"
         else:
             exists += " and Email"
-    
-
 
     if not exists:
         user = User.objects.create_user(username, email, password)
-        
+
         user.first_name = first_name
         user.last_name = last_name
 
@@ -47,8 +45,6 @@ def add_user(request):
         return HttpResponse("Added")
     else:
         return HttpResponse(exists + " taken")
-
-
 
 
 @csrf_exempt
@@ -65,6 +61,15 @@ def sign_in(request):
         return HttpResponse("Signed in!")
     else:
         return HttpResponse("No users with those credentials.")
+
+
+@csrf_exempt
+def give_name(request):
+    body = json.loads(request.body)
+    username = body["username"]
+    name = User.objects.get(username=username).first_name
+
+    return HttpResponse(name)
 
     # body = json.loads(request.body)
 

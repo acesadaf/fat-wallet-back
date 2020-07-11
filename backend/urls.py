@@ -20,4 +20,5 @@ urlpatterns = [
     path('expense_delete', expense_table.expense_delete, name="expense_delete"),
     path('expense_edit', expense_table.expense_edit, name="expense_edit"),
     path('stats_data', stats.stats_data, name="stats_data"),
+    path('give_name', signin.give_name, name="given_name"),
 ]
