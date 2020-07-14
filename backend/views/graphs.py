@@ -47,14 +47,14 @@ def monthly_user_data(request):
     
     monthly_expense = {}
     for e in range(count-1, -1,-1):
-        if today.month-e < 0:
-            temp = list(expense.objects.filter(user= this_user, date__year=today.year-1, date__month = 12 + (today.month-e+1)).aggregate(Sum('amount')).values())[0]
+        if today.month-e-1 < 0:
+            temp = list(expense.objects.filter(user= this_user, date__year=today.year-1, date__month = 12 + (today.month-e)).aggregate(Sum('amount')).values())[0]
             if temp != None:
                 monthly_expense[month[today.month - e -1]] = float(temp)
             else:
                 monthly_expense[month[today.month - e -1]] = float(0)
         else:
-            temp = list(expense.objects.filter(user= this_user, date__year=today.year, date__month = today.month-e+1).aggregate(Sum('amount')).values())[0]
+            temp = list(expense.objects.filter(user= this_user, date__year=today.year, date__month = today.month-e).aggregate(Sum('amount')).values())[0]
             if temp != None:
                 monthly_expense[month[today.month - e -1]] = float(temp)
             else:
