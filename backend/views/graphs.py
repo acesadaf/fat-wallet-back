@@ -15,6 +15,7 @@ from django.db.models import Sum
 
 user_signed_in = None
 
+
 @csrf_exempt
 def category_wise_user_data(request):
     body = json.loads(request.body)
@@ -40,27 +41,27 @@ def monthly_user_data(request):
     requesting_user, count, month_or_week = body["username"], body["duration"], body["month_or_week"]
     this_user = User.objects.get(username=requesting_user)
     # month_wise = {}
-    
+
     today = datetime.date.today()
     print(today)
-    month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    
-    monthly_expense = {}
-    for e in range(count-1, -1,-1):
-        if today.month-e-1 < 0:
-            temp = list(expense.objects.filter(user= this_user, date__year=today.year-1, date__month = 12 + (today.month-e)).aggregate(Sum('amount')).values())[0]
-            if temp != None:
-                monthly_expense[month[today.month - e -1]] = float(temp)
-            else:
-                monthly_expense[month[today.month - e -1]] = float(0)
-        else:
-            temp = list(expense.objects.filter(user= this_user, date__year=today.year, date__month = today.month-e).aggregate(Sum('amount')).values())[0]
-            if temp != None:
-                monthly_expense[month[today.month - e -1]] = float(temp)
-            else:
-                monthly_expense[month[today.month - e -1]] = float(0)
+    month = ["January", "February", "March", "April", "May", "June",
+             "July", "August", "September", "October", "November", "December"]
 
-    print(expense.objects.all())
-    print(monthly_expense)
+    monthly_expense = {}
+    for e in range(count-1, -1, -1):
+        if today.month-e-1 < 0:
+            temp = list(expense.objects.filter(user=this_user, date__year=today.year-1,
+                                               date__month=12 + (today.month-e)).aggregate(Sum('amount')).values())[0]
+            if temp != None:
+                monthly_expense[month[today.month - e - 1]] = float(temp)
+            else:
+                monthly_expense[month[today.month - e - 1]] = float(0)
+        else:
+            temp = list(expense.objects.filter(user=this_user, date__year=today.year,
+                                               date__month=today.month-e).aggregate(Sum('amount')).values())[0]
+            if temp != None:
+                monthly_expense[month[today.month - e - 1]] = float(temp)
+            else:
+                monthly_expense[month[today.month - e - 1]] = float(0)
 
     return JsonResponse(monthly_expense)

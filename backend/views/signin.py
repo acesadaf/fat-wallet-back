@@ -57,7 +57,6 @@ def sign_in(request):
     if user is not None:
 
         user_signed_in = username
-        print("Signed in:", user_signed_in)
         return HttpResponse("Signed in!")
     else:
         return HttpResponse("No users with those credentials.")

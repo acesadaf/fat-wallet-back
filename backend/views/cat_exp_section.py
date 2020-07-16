@@ -34,7 +34,6 @@ def category_data(request):
 
 @csrf_exempt
 def expense_submit(request):
-    print("adding...")
     body = json.loads(request.body)
     name, amount, date_of_expense, category, description, user = body["name"], body[
         "amount"], body["date_of_expense"], body["category"], body["description"], body["user"]
@@ -42,20 +41,17 @@ def expense_submit(request):
     exp = expense(name=name, amount=amount, date=date_of_expense, category=purchase_category.objects.get(
         category=category), description=description, user=User.objects.get(username=user))
     exp.save()
-    print(expense.objects.all())
     return HttpResponse("Expense Added")
 
 
 @csrf_exempt
 def category_submit(request):
-    print("adding...")
     body = json.loads(request.body)
     name, category = body["name"], body["category"]
     try:
         cat = purchase_category(user=User.objects.get(
             username=name), category=category)
         cat.save()
-        # print(purchase_category.objects.all())
         return HttpResponse("Category Added")
     except:
         return HttpResponse("Failed to Add")
@@ -63,34 +59,24 @@ def category_submit(request):
 
 @csrf_exempt
 def category_delete(request):
-    print("deleting...")
     body = json.loads(request.body)
     name, cat = body["name"], body["category"]
 
-    print(purchase_category.objects.all())
     purchase_category.objects.get(user=User.objects.get(
         username=name), category=cat).delete()
-    print(purchase_category.objects.all())
 
     return HttpResponse("Category deleted")
 
 
 @csrf_exempt
 def category_edit(request):
-    print("editing...")
     body = json.loads(request.body)
     name, old_cat, new_cat = body["name"], body["old"], body["new"]
-
-    print(purchase_category.objects.filter(
-        user=User.objects.get(username=name)))
 
     edited_cat = purchase_category.objects.get(user=User.objects.get(
         username=name), category=old_cat)
 
     edited_cat.category = new_cat
     edited_cat.save()
-
-    print(purchase_category.objects.filter(
-        user=User.objects.get(username=name)))
 
     return HttpResponse("Category Edited")

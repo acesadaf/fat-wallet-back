@@ -20,8 +20,6 @@ def expense_data(request):
     requesting_user = body["username"]
     this_user = User.objects.get(username=requesting_user)
     expenses = expense.objects.filter(user=this_user)
-    print(expenses)
-    print("removing id and user_id...")
     to_send = expenses.values()
     for exp in to_send:
         cat_id = exp['category_id']
@@ -32,11 +30,8 @@ def expense_data(request):
         exp['category_name'] = category_name
         exp['amount'] = float(exp['amount'])
         exp['date'] = str(exp['date'])
-    print(to_send)
-    print("converting to json...")
+
     to_send = list(to_send)
-    # post_data = json.dumps(to_send)
-    # print(post_data)
     return JsonResponse(to_send, safe=False)
 
 
@@ -44,10 +39,8 @@ def expense_data(request):
 def expense_delete(request):
     body = json.loads(request.body)
     to_be_deleted = body["id"]
-    print(expense.objects.all())
     exp = expense.objects.filter(id=to_be_deleted)
     exp.delete()
-    print(expense.objects.all())
     return HttpResponse("Deleted")
 
 
@@ -87,10 +80,8 @@ def expense_edit(request):
 
     for key, value in body.items():
         if key != "id" and key != "category":
-            print(key)
             setattr(e, key, value)
 
     e.save()
-    print(expense.objects.all())
 
     return HttpResponse("Deleted")
