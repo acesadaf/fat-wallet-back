@@ -69,3 +69,19 @@ def give_name(request):
 
     return HttpResponse(name)
 
+@csrf_exempt
+def home(request):
+    return HttpResponse("ok")
+
+    # body = json.loads(request.body)
+
+    # if "id" in body:
+    #     print(body["id"])
+    #     print("here")
+    #     post_data = json.dumps({"name": "sadaf"})
+    #     response = requests.post("http://127.0.0.1:8000", data=post_data)
+    # return HttpResponse("OK")
+
+    # return redirect('http://stackoverflow.com/')
+
+    # Create your views here.
