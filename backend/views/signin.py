@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -70,15 +69,3 @@ def give_name(request):
 
     return HttpResponse(name)
 
-    # body = json.loads(request.body)
-
-    # if "id" in body:
-    #     print(body["id"])
-    #     print("here")
-    #     post_data = json.dumps({"name": "sadaf"})
-    #     response = requests.post("http://127.0.0.1:8000", data=post_data)
-    # return HttpResponse("OK")
-
-    # return redirect('http://stackoverflow.com/')
-
-    # Create your views here.
