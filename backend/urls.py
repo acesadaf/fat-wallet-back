@@ -5,6 +5,9 @@ from backend.views import graphs, cat_exp_section, signin, expense_table, stats
 
 urlpatterns = [
     path("", signin.home, name="home"),
+    path("home", signin.home, name="home"),
+    path("expenses", signin.home, name="home"),
+
     path("add_user", signin.add_user, name="add_user"),
     path("sign_in", signin.sign_in, name="sign_in"),
     path("expense_submit", cat_exp_section.expense_submit, name="expense_submit"),
