@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
-    "https://acesadaf.github.io/fat-wallet-front/"
+    "https://acesadaf.github.io/fat-wallet-front"
 ]
 
 # Application definition
