@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "https://acesadaf.github.io",
+    "https://saquibirtiza.github.io",
 ]
 
 # Application definition
