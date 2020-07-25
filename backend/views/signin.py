@@ -5,7 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from backend.models import *
+from backend.utils.check_tokens import *
 import json
+import random
 import ast
 from django.http import JsonResponse
 #import decimal
@@ -39,9 +41,11 @@ def add_user(request):
 
         user.first_name = first_name
         user.last_name = last_name
-
+        token = random.randint(0, 99999999)
         user.save()
-        return HttpResponse("Added")
+        ut = user_tokens(user=user, token=token)
+        ut.save()
+        return HttpResponse(str(token))
     else:
         return HttpResponse(exists + " taken")
 
@@ -54,9 +58,10 @@ def sign_in(request):
     user = authenticate(username=username, password=password)
 
     if user is not None:
-
         user_signed_in = username
-        return HttpResponse("Signed in!")
+        ut = user_tokens.objects.get(user=user)
+        token = ut.token
+        return HttpResponse(str(token))
     else:
         return HttpResponse("No users with those credentials.")
 
@@ -64,10 +69,13 @@ def sign_in(request):
 @csrf_exempt
 def give_name(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     username = body["username"]
     name = User.objects.get(username=username).first_name
 
     return HttpResponse(name)
+
 
 @csrf_exempt
 def home(request):

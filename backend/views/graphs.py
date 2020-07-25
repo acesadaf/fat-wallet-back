@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from backend.models import *
+from backend.utils.check_tokens import *
 import json
 import ast
 from django.http import JsonResponse
@@ -18,6 +19,8 @@ user_signed_in = None
 @csrf_exempt
 def category_wise_user_data(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     requesting_user = body["username"]
     this_user = User.objects.get(username=requesting_user)
     expenses = expense.objects.filter(user=this_user).values()
@@ -37,6 +40,8 @@ def category_wise_user_data(request):
 @csrf_exempt
 def monthly_user_data(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     requesting_user, count, month_or_week = body["username"], body["duration"], body["month_or_week"]
     this_user = User.objects.get(username=requesting_user)
     # month_wise = {}

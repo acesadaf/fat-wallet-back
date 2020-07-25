@@ -31,4 +31,13 @@ class expense(models.Model):
     def __str__(self):
         return f"{self.id}, {self.name}, {self.amount}, {self.date}, {self.category}, {self.description}, {self.user}"
 
+
+class user_tokens(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, unique=True, related_name="token")
+    token = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user}, {self.token}"
+
     # Create your models here.

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from backend.models import *
+from backend.utils.check_tokens import *
 import json
 import ast
 from django.http import JsonResponse
@@ -16,6 +17,8 @@ user_signed_in = None
 @csrf_exempt
 def expense_data(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     requesting_user = body["username"]
     this_user = User.objects.get(username=requesting_user)
     expenses = expense.objects.filter(user=this_user)
@@ -37,6 +40,8 @@ def expense_data(request):
 @csrf_exempt
 def expense_delete(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     to_be_deleted = body["id"]
     exp = expense.objects.filter(id=to_be_deleted)
     exp.delete()
@@ -46,7 +51,8 @@ def expense_delete(request):
 @csrf_exempt
 def expense_edit(request):
     body = json.loads(request.body)
-
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     requesting_user = body["username"]
     this_user = User.objects.get(username=requesting_user)
     general_user = User.objects.get(username="General")

@@ -94,10 +94,10 @@ WSGI_APPLICATION = 'fat_wallet_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd8jp3i4jhmofms',
-        'USER': 'rzglfdugvihmsw',
-        'PASSWORD': '774773077a7ff95ff89b4b95d1822f89af070cd767a928fa76ada4cd54a85719',
-        'HOST': 'ec2-54-159-138-67.compute-1.amazonaws.com',
+        'NAME': 'dfioeov1dgmd2a',
+        'USER': 'ajacwmdaevqayg',
+        'PASSWORD': '955871f65070be182e3697494ecb0bea07ba4353df5a84f1ccce304f803dad29',
+        'HOST': 'ec2-18-235-109-97.compute-1.amazonaws.com',
     }
 }
 

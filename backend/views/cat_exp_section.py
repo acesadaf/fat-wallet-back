@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from backend.models import *
+from backend.utils.check_tokens import *
 import json
 import ast
 from django.http import JsonResponse
@@ -14,6 +15,8 @@ user_signed_in = None
 @csrf_exempt
 def category_data(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     requesting_user = body["username"]
     this_user = User.objects.get(username=requesting_user)
     general_user = User.objects.get(username="General")
@@ -34,6 +37,8 @@ def category_data(request):
 @csrf_exempt
 def expense_submit(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     name, amount, date_of_expense, category, description, user = body["name"], body[
         "amount"], body["date_of_expense"], body["category"], body["description"], body["user"]
 
@@ -46,6 +51,8 @@ def expense_submit(request):
 @csrf_exempt
 def category_submit(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     name, category = body["name"], body["category"]
     try:
         cat = purchase_category(user=User.objects.get(
@@ -59,6 +66,8 @@ def category_submit(request):
 @csrf_exempt
 def category_delete(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     name, cat = body["name"], body["category"]
 
     purchase_category.objects.get(user=User.objects.get(
@@ -70,6 +79,8 @@ def category_delete(request):
 @csrf_exempt
 def category_edit(request):
     body = json.loads(request.body)
+    if not valid_token(body):
+        return HttpResponse("Invalid Token")
     name, old_cat, new_cat = body["name"], body["old"], body["new"]
 
     edited_cat = purchase_category.objects.get(user=User.objects.get(
